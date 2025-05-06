@@ -26,6 +26,10 @@ async function telegramHandler(req, res) {
             await (0, telegram_1.handleCheckCommand)(userName);
         }
         console.log(body.message?.text);
+        console.log(JSON.stringify(body.message?.text));
+        for (const char of body.message?.text || '') {
+            console.log(char, char.charCodeAt(0));
+        }
         res.status(200).send('ok');
     }
     catch (error) {

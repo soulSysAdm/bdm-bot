@@ -33,6 +33,10 @@ export default async function telegramHandler(
       await handleCheckCommand(userName)
     }
     console.log(body.message?.text)
+    console.log(JSON.stringify(body.message?.text))
+    for (const char of body.message?.text || '') {
+      console.log(char, char.charCodeAt(0))
+    }
 
     res.status(200).send('ok')
   } catch (error) {
