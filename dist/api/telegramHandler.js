@@ -25,6 +25,7 @@ async function telegramHandler(req, res) {
         if (body.message?.text === '/check') {
             await (0, telegram_1.handleCheckCommand)(userName);
         }
+        console.log(body.message?.text);
         res.status(200).send('ok');
     }
     catch (error) {
