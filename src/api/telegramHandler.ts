@@ -33,6 +33,8 @@ export default async function telegramHandler(
       await handleCheckCommand(userName)
     }
 
+    console.log(body.message?.text)
+
     res.status(200).send('ok')
   } catch (error) {
     console.error('❌ Ошибка основного webhook:', error.message)
