@@ -1,0 +1,27 @@
+{
+  "name": "bdm-vercel-bot",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "tsc",
+    "start": "node dist/api/webhook.js",
+    "test": "tsc && node dist/main.js"
+  },
+  "dependencies": {
+    "@upstash/redis": "^1.34.6",
+    "axios": "^1.8.4",
+    "dotenv": "^16.4.7",
+    "googleapis": "^148.0.0",
+    "moment": "^2.30.1",
+    "moment-timezone": "^0.5.48",
+    "node-fetch": "^3.3.2",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@vercel/node": "^5.1.14",
+    "nodemon": "^3.1.9",
+    "prettier": "^3.5.3",
+    "typescript": "^5.3.3"
+  }
+}

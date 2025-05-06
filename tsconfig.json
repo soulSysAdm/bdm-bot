@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "CommonJS",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "strict": false,               // 💥 отключаем строгую типизацию
+    "noImplicitAny": false,        // ⛔ можно не указывать типы
+    "skipLibCheck": true,          // 🔕 не проверяет типы зависимостей
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": false,
+    "moduleResolution": "node"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
