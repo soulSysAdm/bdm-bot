@@ -10,7 +10,6 @@ if (process.env.VERCEL) {
   TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN || ''
 }
 
-
 const INSTRUCTION_TEXT = `📝 Инструкция по вводу данных:
 
 1. Название сервиса  
@@ -36,6 +35,7 @@ export async function sendTelegramMessage(chatId: number, text: string) {
       {
         chat_id: chatId,
         text,
+        disable_web_page_preview: true,
       },
     )
     return res.data.result?.message_id
@@ -51,8 +51,8 @@ export async function sendInstructionTelegramMessage(chatId: number) {
       {
         chat_id: chatId,
         text: INSTRUCTION_TEXT,
-        // parse_mode: 'Markdown',
-        disable_web_page_preview: true
+        parse_mode: 'Markdown',
+        disable_web_page_preview: true,
       },
     )
     return res.data.result?.message_id
@@ -60,6 +60,3 @@ export async function sendInstructionTelegramMessage(chatId: number) {
     console.error('❌ Ошибка отправки сообщения:', error.message)
   }
 }
-
-
-
