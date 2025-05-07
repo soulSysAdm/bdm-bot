@@ -32,20 +32,19 @@ export default async function telegramHandler(
     if (text === '/start') {
       await handleStartCommand(chatId, userName)
       await sendInstructionTelegramMessage(chatId)
-      return
-    }
-
-    if (text === '/help') {
-      // await handleCheckCommand(userName)
+    } else if (text === '/help') {
       await sendInstructionTelegramMessage(chatId)
-      return
+    } else {
+
+
+      console.log(text )
+      console.log(JSON.stringify(text))
+      await handleCallbackQuery(userName, text, chatId, messageId)
+      res.status(200).send('ok')
     }
-    console.log(text)
-    console.log(JSON.stringify(text))
 
-    await handleCallbackQuery(userName, text, chatId, messageId)
 
-    res.status(200).send('ok')
+
   } catch (error) {
     console.error('❌ Ошибка основного webhook:', error.message)
     res.status(500).send('Ошибка сервера')

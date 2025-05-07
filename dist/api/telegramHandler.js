@@ -25,17 +25,16 @@ async function telegramHandler(req, res) {
         if (text === '/start') {
             await (0, telegram_1.handleStartCommand)(chatId, userName);
             await (0, telegram_1.sendInstructionTelegramMessage)(chatId);
-            return;
         }
-        if (text === '/help') {
-            // await handleCheckCommand(userName)
+        else if (text === '/help') {
             await (0, telegram_1.sendInstructionTelegramMessage)(chatId);
-            return;
         }
-        console.log(text);
-        console.log(JSON.stringify(text));
-        await (0, telegram_2.handleCallbackQuery)(userName, text, chatId, messageId);
-        res.status(200).send('ok');
+        else {
+            console.log(text);
+            console.log(JSON.stringify(text));
+            await (0, telegram_2.handleCallbackQuery)(userName, text, chatId, messageId);
+            res.status(200).send('ok');
+        }
     }
     catch (error) {
         console.error('❌ Ошибка основного webhook:', error.message);
