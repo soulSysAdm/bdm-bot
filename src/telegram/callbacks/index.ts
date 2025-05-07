@@ -1,7 +1,5 @@
 import axios from 'axios'
-import {
-  sendTelegramMessage,
-} from '../index.js'
+import { sendTelegramMessage } from '../index.js'
 
 let TELEGRAM_TOKEN: string | undefined
 
@@ -13,9 +11,9 @@ if (process.env.VERCEL) {
   TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN || ''
 }
 
-const sendErrorMassage = async (chatId:number, message:string) => {
-    const messageTelegram = `Ошибка ${message}"`
-    await sendTelegramMessage(chatId, messageTelegram)
+const sendErrorMassage = async (chatId: number, message: string) => {
+  const messageTelegram = `Ошибка ${message}"`
+  await sendTelegramMessage(chatId, messageTelegram)
 }
 
 const deleteMessage = async (chatId: number, messageId: number) => {
@@ -24,41 +22,63 @@ const deleteMessage = async (chatId: number, messageId: number) => {
     {
       chat_id: chatId,
       message_id: messageId,
-    }
+    },
   )
 }
 
-
-function parseMessage(message: string) {
-  const lines = message.trim().split('\n').map(l => l.trim()).filter(Boolean)
+function parseMessage(message: string, userName: string) {
+  const lines = message
+    .trim()
+    .split('\n')
+    .map((l) => l.trim())
+    .filter(Boolean)
 
   const [name, link, login, password, nickname] = lines
 
+  if (!name || !link || !login || !password) return null
+
   return {
-    name: name || null,
-    link: link || null,
-    login: login || null,
-    password: password || null,
-    nickname: nickname || null
+    name: name,
+    link: link,
+    login: login,
+    password: password,
+    nickname: nickname || userName || null,
   }
 }
 
-
-export async function handleCallbackQuery(userName:string, text:string, chatId:number, messageId: number) {
+export async function handleCallbackQuery(
+  userName: string,
+  text: string,
+  chatId: number,
+  messageId: number,
+) {
   try {
     // console.log('callbackQuery ', callbackQuery)
     // const user = callbackQuery.from.username || callbackQuery.from.first_name
     // const messageId = callbackQuery.message.message_id
 
-    const dataMessage = parseMessage(text)
+    const dataMessage = parseMessage(text, userName)
+
     console.log('dataMessage ', dataMessage)
     await deleteMessage(chatId, messageId)
-    await sendTelegramMessage(  chatId, `
-    user: ${userName}, 
-    name: ${dataMessage.name}, 
-    link: ${dataMessage.link}, 
-    password: ${dataMessage.password}, 
-    nickname: ${dataMessage.nickname},`)
+    if (!dataMessage) {
+      await sendTelegramMessage(
+        chatId,
+        `Сообщение отправлено не по иструкции. Отсутвует Название сервиса или Ссылка или Логин или почта или Пароль`,
+      )
+    } else {
+      await sendTelegramMessage(
+        chatId,
+        `
+        Доступы успешно записаны. 
+        user: ${userName}, 
+        name: ${dataMessage.name}, 
+        link: ${dataMessage.link}, 
+        password: ${dataMessage.password}, 
+        nickname: ${dataMessage.nickname},`,
+      )
+    }
+
     // if (action === PAY_PART_KEY) {
     //   await handlePayClick(callbackQuery, id, messageId, user)
     // } else if (action === CANCEL_PAY_PART_KEY) {

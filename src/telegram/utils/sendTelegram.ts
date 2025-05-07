@@ -51,7 +51,7 @@ export async function sendInstructionTelegramMessage(chatId: number) {
       {
         chat_id: chatId,
         text: INSTRUCTION_TEXT,
-        parse_mode: 'Markdown',
+        // parse_mode: 'Markdown',
         disable_web_page_preview: true,
       },
     )

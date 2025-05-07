@@ -25,15 +25,21 @@ const deleteMessage = async (chatId, messageId) => {
         message_id: messageId,
     });
 };
-function parseMessage(message) {
-    const lines = message.trim().split('\n').map(l => l.trim()).filter(Boolean);
+function parseMessage(message, userName) {
+    const lines = message
+        .trim()
+        .split('\n')
+        .map((l) => l.trim())
+        .filter(Boolean);
     const [name, link, login, password, nickname] = lines;
+    if (!name || !link || !login || !password)
+        return null;
     return {
-        name: name || null,
-        link: link || null,
-        login: login || null,
-        password: password || null,
-        nickname: nickname || null
+        name: name,
+        link: link,
+        login: login,
+        password: password,
+        nickname: nickname || userName || null,
     };
 }
 async function handleCallbackQuery(userName, text, chatId, messageId) {
@@ -41,15 +47,21 @@ async function handleCallbackQuery(userName, text, chatId, messageId) {
         // console.log('callbackQuery ', callbackQuery)
         // const user = callbackQuery.from.username || callbackQuery.from.first_name
         // const messageId = callbackQuery.message.message_id
-        const dataMessage = parseMessage(text);
+        const dataMessage = parseMessage(text, userName);
         console.log('dataMessage ', dataMessage);
         await deleteMessage(chatId, messageId);
-        await (0, index_js_1.sendTelegramMessage)(chatId, `
-    user: ${userName}, 
-    name: ${dataMessage.name}, 
-    link: ${dataMessage.link}, 
-    password: ${dataMessage.password}, 
-    nickname: ${dataMessage.nickname},`);
+        if (!dataMessage) {
+            await (0, index_js_1.sendTelegramMessage)(chatId, `Сообщение отправлено не по иструкции. Отсутвует Название сервиса или Ссылка или Логин или почта или Пароль`);
+        }
+        else {
+            await (0, index_js_1.sendTelegramMessage)(chatId, `
+        Доступы успешно записаны. 
+        user: ${userName}, 
+        name: ${dataMessage.name}, 
+        link: ${dataMessage.link}, 
+        password: ${dataMessage.password}, 
+        nickname: ${dataMessage.nickname},`);
+        }
         // if (action === PAY_PART_KEY) {
         //   await handlePayClick(callbackQuery, id, messageId, user)
         // } else if (action === CANCEL_PAY_PART_KEY) {
