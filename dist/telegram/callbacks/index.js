@@ -36,17 +36,16 @@ function parseMessage(message) {
         nickname: nickname || null
     };
 }
-async function handleCallbackQuery(callbackQuery, message, chatId) {
+async function handleCallbackQuery(userName, text, chatId, messageId) {
     try {
-        const data = callbackQuery.data;
-        const [action, id] = data.split('_');
-        const user = callbackQuery.from.username || callbackQuery.from.first_name;
-        const messageId = callbackQuery.message.message_id;
-        const dataMessage = parseMessage(message);
+        // console.log('callbackQuery ', callbackQuery)
+        // const user = callbackQuery.from.username || callbackQuery.from.first_name
+        // const messageId = callbackQuery.message.message_id
+        const dataMessage = parseMessage(text);
         console.log('dataMessage ', dataMessage);
         await deleteMessage(chatId, messageId);
         await (0, index_js_1.sendTelegramMessage)(chatId, `
-    user: ${user}, 
+    user: ${userName}, 
     name: ${dataMessage.name}, 
     link: ${dataMessage.link}, 
     password: ${dataMessage.password}, 

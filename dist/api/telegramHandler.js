@@ -16,19 +16,21 @@ async function telegramHandler(req, res) {
             body?.message?.from?.first_name ||
             body?.callback_query?.from?.username ||
             body?.callback_query?.from?.first_name;
+        const text = typeof body.message?.text === 'string' ? body.message.text : '';
+        const messageId = body?.message?.message_id;
         if (!(await (0, checkUser_1.isAuthorizedUser)(userId, chatId, userName))) {
             res.status(200).send('🚫 Доступ запрещён');
             return;
         }
-        if (body.message?.text === '/start') {
+        if (text === '/start') {
             await (0, telegram_1.handleStartCommand)(chatId, userName);
         }
-        if (body.message?.text === '/check') {
+        if (text === '/check') {
             await (0, telegram_1.handleCheckCommand)(userName);
         }
-        console.log(body.message?.text);
-        console.log(JSON.stringify(body.message?.text));
-        await (0, telegram_2.handleCallbackQuery)(body.callback_query, body.message?.text, chatId);
+        console.log(text);
+        console.log(JSON.stringify(text));
+        await (0, telegram_2.handleCallbackQuery)(userName, text, chatId, messageId);
         res.status(200).send('ok');
     }
     catch (error) {

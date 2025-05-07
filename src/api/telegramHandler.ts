@@ -21,22 +21,25 @@ export default async function telegramHandler(
       body?.callback_query?.from?.username ||
       body?.callback_query?.from?.first_name
 
+    const text = typeof body.message?.text === 'string' ? body.message.text : ''
+    const messageId = body?.message?.message_id
+
     if (!(await isAuthorizedUser(userId, chatId, userName))) {
       res.status(200).send('🚫 Доступ запрещён')
       return
     }
 
-    if (body.message?.text === '/start') {
+    if (text === '/start') {
       await handleStartCommand(chatId, userName)
     }
 
-    if (body.message?.text === '/check') {
+    if (text === '/check') {
       await handleCheckCommand(userName)
     }
-    console.log(body.message?.text)
-    console.log(JSON.stringify(body.message?.text))
+    console.log(text)
+    console.log(JSON.stringify(text))
 
-    await handleCallbackQuery(body.callback_query, body.message?.text, chatId)
+    await handleCallbackQuery(userName, text, chatId, messageId)
 
     res.status(200).send('ok')
   } catch (error) {

@@ -43,18 +43,18 @@ function parseMessage(message: string) {
   }
 }
 
-export async function handleCallbackQuery(callbackQuery, message:string, chatId:number) {
-  try {
-    const data = callbackQuery.data
-    const [action, id] = data.split('_')
-    const user = callbackQuery.from.username || callbackQuery.from.first_name
-    const messageId = callbackQuery.message.message_id
 
-    const dataMessage = parseMessage(message)
+export async function handleCallbackQuery(userName:string, text:string, chatId:number, messageId: number) {
+  try {
+    // console.log('callbackQuery ', callbackQuery)
+    // const user = callbackQuery.from.username || callbackQuery.from.first_name
+    // const messageId = callbackQuery.message.message_id
+
+    const dataMessage = parseMessage(text)
     console.log('dataMessage ', dataMessage)
     await deleteMessage(chatId, messageId)
     await sendTelegramMessage(  chatId, `
-    user: ${user}, 
+    user: ${userName}, 
     name: ${dataMessage.name}, 
     link: ${dataMessage.link}, 
     password: ${dataMessage.password}, 
