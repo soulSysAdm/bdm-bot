@@ -40,3 +40,7 @@ export const getValidateObject = (data?: unknown): Record<string, unknown> => {
 
   return data as Record<string, unknown>
 }
+
+export const getTrimValue = (value: string): string => {
+  return getValidateString(value).trim()
+}

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getValidateObject = exports.getValidateArray = exports.getValidateBoolean = exports.getLowerCase = exports.getValidateString = exports.getValidateNumber = void 0;
+exports.getTrimValue = exports.getValidateObject = exports.getValidateArray = exports.getValidateBoolean = exports.getLowerCase = exports.getValidateString = exports.getValidateNumber = void 0;
 const getValidateNumber = (value) => {
     if (typeof value !== 'number' && typeof value !== 'string')
         return 0;
@@ -43,3 +43,7 @@ const getValidateObject = (data) => {
     return data;
 };
 exports.getValidateObject = getValidateObject;
+const getTrimValue = (value) => {
+    return (0, exports.getValidateString)(value).trim();
+};
+exports.getTrimValue = getTrimValue;

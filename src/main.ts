@@ -1,4 +1,4 @@
-import { readSheet, repeatSheet } from './google'
+import { readSheet, writeSheet } from './google'
 import { setSheetData, getSheetData } from '../mock/sheet.js'
 
 // const getReadSheet = async (): Promise<SheetObject[]> => {
@@ -20,9 +20,12 @@ const dataSheetFunc = async (): Promise<void> => {
 
 // dataSheetFunc().catch((err) => console.log(err))
 
-
 function parseMessage(message: string) {
-  const lines = message.trim().split('\n').map(l => l.trim()).filter(Boolean)
+  const lines = message
+    .trim()
+    .split('\n')
+    .map((l) => l.trim())
+    .filter(Boolean)
 
   const [name, link, login, password, nickname] = lines
 
@@ -31,7 +34,7 @@ function parseMessage(message: string) {
     link: link || null,
     login: login || null,
     password: password || null,
-    nickname: nickname || null
+    nickname: nickname || null,
   }
 }
 

@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { sendTelegramMessage } from '../index.js'
+import { DataMessage } from '../../types'
+import { writeSheet } from '../../google'
 
 let TELEGRAM_TOKEN: string | undefined
 
@@ -26,7 +28,7 @@ const deleteMessage = async (chatId: number, messageId: number) => {
   )
 }
 
-function parseMessage(message: string, userName: string) {
+function parseMessage(message: string, userName: string): DataMessage {
   const lines = message
     .trim()
     .split('\n')
@@ -64,13 +66,14 @@ export async function handleCallbackQuery(
     if (!dataMessage) {
       await sendTelegramMessage(
         chatId,
-        `Сообщение отправлено не по иструкции. Отсутвует Название сервиса или Ссылка или Логин или почта или Пароль`,
+        `❌ Сообщение отправлено не по иструкции. Отсутвует одно из обязательных полей`,
       )
     } else {
+      await writeSheet(dataMessage)
       await sendTelegramMessage(
         chatId,
         `
-        Доступы успешно записаны. 
+        ✅ Доступы успешно записаны. 
         user: ${userName}, 
         name: ${dataMessage.name}, 
         link: ${dataMessage.link}, 
@@ -78,16 +81,6 @@ export async function handleCallbackQuery(
         nickname: ${dataMessage.nickname},`,
       )
     }
-
-    // if (action === PAY_PART_KEY) {
-    //   await handlePayClick(callbackQuery, id, messageId, user)
-    // } else if (action === CANCEL_PAY_PART_KEY) {
-    //   await handleCancelPayClick(callbackQuery, id, messageId, user)
-    // } else if (action === PAID_PART_KEY) {
-    //   await handlePaidClick(callbackQuery, id, messageId, user)
-    // } else if (action === CANCEL_PAID_PART_KEY) {
-    //   await handleCancelPaidClick(callbackQuery, id, messageId, user)
-    // }
   } catch (error) {
     console.error('❌ Ошибка обработки callbackQuery:', error.message)
     await sendErrorMassage(chatId, error.message)

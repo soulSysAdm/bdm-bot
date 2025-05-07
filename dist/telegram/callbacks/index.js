@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleCallbackQuery = handleCallbackQuery;
 const axios_1 = __importDefault(require("axios"));
 const index_js_1 = require("../index.js");
+const google_1 = require("../../google");
 let TELEGRAM_TOKEN;
 if (process.env.VERCEL) {
     TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN || '';
@@ -51,26 +52,18 @@ async function handleCallbackQuery(userName, text, chatId, messageId) {
         console.log('dataMessage ', dataMessage);
         await deleteMessage(chatId, messageId);
         if (!dataMessage) {
-            await (0, index_js_1.sendTelegramMessage)(chatId, `Сообщение отправлено не по иструкции. Отсутвует Название сервиса или Ссылка или Логин или почта или Пароль`);
+            await (0, index_js_1.sendTelegramMessage)(chatId, `❌ Сообщение отправлено не по иструкции. Отсутвует одно из обязательных полей`);
         }
         else {
+            await (0, google_1.writeSheet)(dataMessage);
             await (0, index_js_1.sendTelegramMessage)(chatId, `
-        Доступы успешно записаны. 
+        ✅ Доступы успешно записаны. 
         user: ${userName}, 
         name: ${dataMessage.name}, 
         link: ${dataMessage.link}, 
         password: ${dataMessage.password}, 
         nickname: ${dataMessage.nickname},`);
         }
-        // if (action === PAY_PART_KEY) {
-        //   await handlePayClick(callbackQuery, id, messageId, user)
-        // } else if (action === CANCEL_PAY_PART_KEY) {
-        //   await handleCancelPayClick(callbackQuery, id, messageId, user)
-        // } else if (action === PAID_PART_KEY) {
-        //   await handlePaidClick(callbackQuery, id, messageId, user)
-        // } else if (action === CANCEL_PAID_PART_KEY) {
-        //   await handleCancelPaidClick(callbackQuery, id, messageId, user)
-        // }
     }
     catch (error) {
         console.error('❌ Ошибка обработки callbackQuery:', error.message);

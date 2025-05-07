@@ -24,3 +24,7 @@ export const COLS_KEY = 'cols'
 
 //Telegram messages Keys
 export const NO_NUMBERS_BY_MONTH = 'Нет номеров в этом месяце'
+
+//Update Cell keys
+export const RANGE_KEY = 'range'
+export const VALUES_KEY = 'values'

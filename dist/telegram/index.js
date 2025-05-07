@@ -17,5 +17,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./utils/sendTelegram"), exports);
 __exportStar(require("./utils/checkUser"), exports);
 __exportStar(require("./commands/start"), exports);
-__exportStar(require("./commands/check"), exports);
+// export * from './commands/check'
 __exportStar(require("./callbacks"), exports);

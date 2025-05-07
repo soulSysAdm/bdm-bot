@@ -1,7 +1,7 @@
 // === 🤖 Telegram Webhook Handler ===
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import telegramHandler from './telegramHandler'
-import googleHandler from './googleHandler'
+// import googleHandler from './googleHandler'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const path = req.url
@@ -10,9 +10,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return telegramHandler(req, res)
   }
 
-  if (path === '/check') {
-    return googleHandler(req, res)
-  }
+  // if (path === '/check') {
+  //   return googleHandler(req, res)
+  // }
 
   return res.status(404).send('🔍 Not Found')
 }

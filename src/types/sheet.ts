@@ -9,7 +9,31 @@ import {
   VALID_YES_KEY,
 } from '../constants'
 
-export type SheetRow = (string | number | boolean | null)[]
+export type SheetRow1 = (string | number | boolean | null)[]
+export type SheetData1 = SheetRow1[]
+
+export type ColumnKey =
+  | 'A'
+  | 'B'
+  | 'C'
+  | 'D'
+  | 'E'
+  | 'F'
+  | 'G'
+  | 'H'
+  | 'I'
+  | 'J'
+
+export type SheetRow = {
+  [key in ColumnKey]?: string | null
+} & {
+  id: number
+  _sheetMeta: {
+    row: number
+    cols: Record<ColumnKey, string>
+  }
+}
+
 export type SheetData = SheetRow[]
 
 export type SheetObject = Record<string, any> & {
@@ -40,4 +64,17 @@ export interface NumberRowWithDate extends SheetNumberRow {
 export interface DataByMonth {
   title: string
   data: NumberRowWithDate[]
+}
+
+export interface DataMessage {
+  name: string
+  link: string
+  login: string
+  password: string
+  nickname: string
+}
+
+export interface SheetUpdate {
+  range: string
+  values: string[][]
 }

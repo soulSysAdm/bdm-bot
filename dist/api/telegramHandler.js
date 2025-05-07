@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = telegramHandler;
 const dateFormat_1 = require("../assets/dateFormat");
-const checkUser_1 = require("../telegram/utils/checkUser");
 const telegram_1 = require("../telegram");
 const telegram_2 = require("../telegram");
 // : Promise<VercelResponse>
@@ -18,7 +17,7 @@ async function telegramHandler(req, res) {
             body?.callback_query?.from?.first_name;
         const text = typeof body.message?.text === 'string' ? body.message.text : '';
         const messageId = body?.message?.message_id;
-        if (!(await (0, checkUser_1.isAuthorizedUser)(userId, chatId, userName))) {
+        if (!(await (0, telegram_1.isAuthorizedUser)(userId, chatId, userName))) {
             res.status(200).send('🚫 Доступ запрещён');
             return;
         }

@@ -1,3 +1,3 @@
 export * from './sheets/readSheet'
-export * from './sheets/repeatSheet'
+export * from './sheets/writeSheet'
 export * from './utils/dataSheet'

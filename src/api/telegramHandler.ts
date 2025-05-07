@@ -1,10 +1,9 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { getTimeInUkraine } from '../assets/dateFormat'
-import { isAuthorizedUser } from '../telegram/utils/checkUser'
 import {
   handleStartCommand,
-  handleCheckCommand,
   sendInstructionTelegramMessage,
+  isAuthorizedUser,
 } from '../telegram'
 import { handleCallbackQuery } from '../telegram'
 

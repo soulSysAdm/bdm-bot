@@ -18,14 +18,18 @@ const dataSheetFunc = async () => {
 };
 // dataSheetFunc().catch((err) => console.log(err))
 function parseMessage(message) {
-    const lines = message.trim().split('\n').map(l => l.trim()).filter(Boolean);
+    const lines = message
+        .trim()
+        .split('\n')
+        .map((l) => l.trim())
+        .filter(Boolean);
     const [name, link, login, password, nickname] = lines;
     return {
         name: name || null,
         link: link || null,
         login: login || null,
         password: password || null,
-        nickname: nickname || null
+        nickname: nickname || null,
     };
 }
 const text = `

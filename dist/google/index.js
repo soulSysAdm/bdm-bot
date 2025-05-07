@@ -15,5 +15,5 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./sheets/readSheet"), exports);
-__exportStar(require("./sheets/repeatSheet"), exports);
+__exportStar(require("./sheets/writeSheet"), exports);
 __exportStar(require("./utils/dataSheet"), exports);
