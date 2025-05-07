@@ -49,6 +49,8 @@ async function sendInstructionTelegramMessage(chatId) {
         const res = await axios_1.default.post(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
             chat_id: chatId,
             text: INSTRUCTION_TEXT,
+            parse_mode: 'Markdown',
+            disable_web_page_preview: true
         });
         return res.data.result?.message_id;
     }

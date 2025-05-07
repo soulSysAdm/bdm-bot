@@ -32,11 +32,13 @@ export default async function telegramHandler(
     if (text === '/start') {
       await handleStartCommand(chatId, userName)
       await sendInstructionTelegramMessage(chatId)
+      return
     }
 
     if (text === '/help') {
       // await handleCheckCommand(userName)
       await sendInstructionTelegramMessage(chatId)
+      return
     }
     console.log(text)
     console.log(JSON.stringify(text))
