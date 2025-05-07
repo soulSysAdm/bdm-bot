@@ -1,8 +1,12 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { getTimeInUkraine } from '../assets/dateFormat'
 import { isAuthorizedUser } from '../telegram/utils/checkUser'
-import { handleStartCommand, handleCheckCommand, sendInstructionTelegramMessage } from '../telegram'
-import {handleCallbackQuery} from '../telegram'
+import {
+  handleStartCommand,
+  handleCheckCommand,
+  sendInstructionTelegramMessage,
+} from '../telegram'
+import { handleCallbackQuery } from '../telegram'
 
 // : Promise<VercelResponse>
 export default async function telegramHandler(
@@ -35,16 +39,11 @@ export default async function telegramHandler(
     } else if (text === '/help') {
       await sendInstructionTelegramMessage(chatId)
     } else {
-
-
-      console.log(text )
+      console.log(text)
       console.log(JSON.stringify(text))
       await handleCallbackQuery(userName, text, chatId, messageId)
-      res.status(200).send('ok')
     }
-
-
-
+    res.status(200).send('ok')
   } catch (error) {
     console.error('❌ Ошибка основного webhook:', error.message)
     res.status(500).send('Ошибка сервера')

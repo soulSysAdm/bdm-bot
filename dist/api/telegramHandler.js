@@ -33,8 +33,8 @@ async function telegramHandler(req, res) {
             console.log(text);
             console.log(JSON.stringify(text));
             await (0, telegram_2.handleCallbackQuery)(userName, text, chatId, messageId);
-            res.status(200).send('ok');
         }
+        res.status(200).send('ok');
     }
     catch (error) {
         console.error('❌ Ошибка основного webhook:', error.message);
