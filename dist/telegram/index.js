@@ -18,3 +18,4 @@ __exportStar(require("./utils/sendTelegram"), exports);
 __exportStar(require("./utils/checkUser"), exports);
 __exportStar(require("./commands/start"), exports);
 __exportStar(require("./commands/check"), exports);
+__exportStar(require("./callbacks"), exports);

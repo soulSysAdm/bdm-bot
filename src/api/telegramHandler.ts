@@ -2,6 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { getTimeInUkraine } from '../assets/dateFormat'
 import { isAuthorizedUser } from '../telegram/utils/checkUser'
 import { handleStartCommand, handleCheckCommand } from '../telegram'
+import {handleCallbackQuery} from '../telegram'
 
 // : Promise<VercelResponse>
 export default async function telegramHandler(
@@ -34,9 +35,8 @@ export default async function telegramHandler(
     }
     console.log(body.message?.text)
     console.log(JSON.stringify(body.message?.text))
-    for (const char of body.message?.text || '') {
-      console.log(char, char.charCodeAt(0))
-    }
+
+    await handleCallbackQuery(body.callback_query, body.message?.text, chatId)
 
     res.status(200).send('ok')
   } catch (error) {

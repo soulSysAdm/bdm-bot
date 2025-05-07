@@ -4,6 +4,7 @@ exports.default = telegramHandler;
 const dateFormat_1 = require("../assets/dateFormat");
 const checkUser_1 = require("../telegram/utils/checkUser");
 const telegram_1 = require("../telegram");
+const telegram_2 = require("../telegram");
 // : Promise<VercelResponse>
 async function telegramHandler(req, res) {
     console.log('🔥 Webhook вызван в', (0, dateFormat_1.getTimeInUkraine)());
@@ -27,9 +28,7 @@ async function telegramHandler(req, res) {
         }
         console.log(body.message?.text);
         console.log(JSON.stringify(body.message?.text));
-        for (const char of body.message?.text || '') {
-            console.log(char, char.charCodeAt(0));
-        }
+        await (0, telegram_2.handleCallbackQuery)(body.callback_query, body.message?.text, chatId);
         res.status(200).send('ok');
     }
     catch (error) {
