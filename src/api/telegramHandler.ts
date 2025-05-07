@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { getTimeInUkraine } from '../assets/dateFormat'
 import { isAuthorizedUser } from '../telegram/utils/checkUser'
-import { handleStartCommand, handleCheckCommand } from '../telegram'
+import { handleStartCommand, handleCheckCommand, sendInstructionTelegramMessage } from '../telegram'
 import {handleCallbackQuery} from '../telegram'
 
 // : Promise<VercelResponse>
@@ -31,10 +31,12 @@ export default async function telegramHandler(
 
     if (text === '/start') {
       await handleStartCommand(chatId, userName)
+      await sendInstructionTelegramMessage(chatId)
     }
 
-    if (text === '/check') {
-      await handleCheckCommand(userName)
+    if (text === '/help') {
+      // await handleCheckCommand(userName)
+      await sendInstructionTelegramMessage(chatId)
     }
     console.log(text)
     console.log(JSON.stringify(text))

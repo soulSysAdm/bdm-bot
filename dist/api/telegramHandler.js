@@ -24,9 +24,11 @@ async function telegramHandler(req, res) {
         }
         if (text === '/start') {
             await (0, telegram_1.handleStartCommand)(chatId, userName);
+            await (0, telegram_1.sendInstructionTelegramMessage)(chatId);
         }
-        if (text === '/check') {
-            await (0, telegram_1.handleCheckCommand)(userName);
+        if (text === '/help') {
+            // await handleCheckCommand(userName)
+            await (0, telegram_1.sendInstructionTelegramMessage)(chatId);
         }
         console.log(text);
         console.log(JSON.stringify(text));

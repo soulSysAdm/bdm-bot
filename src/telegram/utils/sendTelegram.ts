@@ -10,6 +10,25 @@ if (process.env.VERCEL) {
   TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN || ''
 }
 
+
+const INSTRUCTION_TEXT = `📝 Инструкция по вводу данных:
+
+1. Название сервиса  
+2. Ссылка  
+3. Логин или почта  
+4. Пароль  
+5. Никнейм (можно опустить)
+
+⚠️ Каждое значение — на новой строке.
+Пример:
+
+Cloudflare  
+https://cloudflare.com/login  
+user@gmail.com  
+password123  
+nickname_optional
+`
+
 export async function sendTelegramMessage(chatId: number, text: string) {
   try {
     const res = await axios.post(
@@ -24,3 +43,21 @@ export async function sendTelegramMessage(chatId: number, text: string) {
     console.error('❌ Ошибка отправки сообщения:', error.message)
   }
 }
+
+export async function sendInstructionTelegramMessage(chatId: number) {
+  try {
+    const res = await axios.post(
+      `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`,
+      {
+        chat_id: chatId,
+        text: INSTRUCTION_TEXT,
+      },
+    )
+    return res.data.result?.message_id
+  } catch (error) {
+    console.error('❌ Ошибка отправки сообщения:', error.message)
+  }
+}
+
+
+
