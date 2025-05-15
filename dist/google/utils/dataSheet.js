@@ -25,15 +25,27 @@ const getSheetDataByWrite = (sheetData, dataMessage) => {
         },
         {
             [constants_1.RANGE_KEY]: globals_1.colsKeys[2] + nextRow,
-            [constants_1.VALUES_KEY]: [[(0, validateData_1.getTrimValue)(dataMessage.login)]],
+            [constants_1.VALUES_KEY]: [[(0, validateData_1.getTrimValue)(dataMessage.email)]],
         },
         {
             [constants_1.RANGE_KEY]: globals_1.colsKeys[3] + nextRow,
-            [constants_1.VALUES_KEY]: [[(0, validateData_1.getTrimValue)(dataMessage.password)]],
+            [constants_1.VALUES_KEY]: [[(0, validateData_1.getTrimValue)(dataMessage.login)]],
         },
         {
             [constants_1.RANGE_KEY]: globals_1.colsKeys[4] + nextRow,
+            [constants_1.VALUES_KEY]: [[(0, validateData_1.getTrimValue)(dataMessage.password)]],
+        },
+        {
+            [constants_1.RANGE_KEY]: globals_1.colsKeys[5] + nextRow,
             [constants_1.VALUES_KEY]: [[(0, validateData_1.getTrimValue)(dataMessage.nickname)]],
+        },
+        {
+            [constants_1.RANGE_KEY]: globals_1.colsKeys[6] + nextRow,
+            [constants_1.VALUES_KEY]: [[(0, validateData_1.getTrimValue)(dataMessage.time)]],
+        },
+        {
+            [constants_1.RANGE_KEY]: globals_1.colsKeys[7] + nextRow,
+            [constants_1.VALUES_KEY]: [[(0, validateData_1.getTrimValue)(dataMessage.other)]],
         },
     ];
 };

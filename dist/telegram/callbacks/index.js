@@ -7,6 +7,8 @@ exports.handleCallbackQuery = handleCallbackQuery;
 const axios_1 = __importDefault(require("axios"));
 const index_js_1 = require("../index.js");
 const google_1 = require("../../google");
+const dateFormat_1 = require("../../assets/dateFormat");
+const constants_1 = require("../../constants");
 let TELEGRAM_TOKEN;
 if (process.env.VERCEL) {
     TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN || '';
@@ -26,21 +28,68 @@ const deleteMessage = async (chatId, messageId) => {
         message_id: messageId,
     });
 };
+const getNameLinkLoginPasswordOther = (array) => {
+    const isLogin = array.length > 3;
+    if (isLogin) {
+        const [name, link, login, password, ...otherStr] = array;
+        const other = otherStr.join(' ');
+        return {
+            name,
+            link,
+            login,
+            password,
+            other,
+        };
+    }
+    else {
+        const [name, link, password, ...otherStr] = array;
+        const other = otherStr.join(' ');
+        return {
+            name,
+            link,
+            login: '',
+            password,
+            other,
+        };
+    }
+};
 function parseMessage(message, userName) {
     const lines = message
         .trim()
         .split('\n')
         .map((l) => l.trim())
         .filter(Boolean);
-    const [name, link, login, password, nickname] = lines;
-    if (!name || !link || !login || !password)
+    const result = {
+        name: '',
+        link: '',
+        email: '',
+        login: '',
+        password: '',
+        nickname: userName,
+        other: '',
+        time: (0, dateFormat_1.getTimeInUkraine)(),
+    };
+    const findGmailIndex = lines.findIndex((value) => value.toLowerCase() === constants_1.CHECK_BY_GMAIL);
+    if (findGmailIndex !== -1) {
+        result.email = lines[findGmailIndex];
+        lines.splice(findGmailIndex, 1);
+        const additionalData = getNameLinkLoginPasswordOther(lines);
+        for (const key in additionalData) {
+            result[key] = additionalData[key];
+        }
+    }
+    else {
+        result.email = lines[2];
+        lines.splice(2, 1);
+        const additionalData = getNameLinkLoginPasswordOther(lines);
+        for (const key in additionalData) {
+            result[key] = additionalData[key];
+        }
+    }
+    if (!result.name || !result.link || !result.email || !result.password)
         return null;
     return {
-        name: name,
-        link: link,
-        login: login,
-        password: password,
-        nickname: nickname || userName || null,
+        ...result,
     };
 }
 async function handleCallbackQuery(userName, text, chatId, messageId) {
@@ -58,11 +107,18 @@ async function handleCallbackQuery(userName, text, chatId, messageId) {
             await (0, google_1.writeSheet)(dataMessage);
             await (0, index_js_1.sendTelegramMessage)(chatId, `
         ✅ Доступы успешно записаны. 
-        user: ${userName}, 
+    
         name: ${dataMessage.name}, 
         link: ${dataMessage.link}, 
+        email: ${dataMessage.email}, 
+        login: ${dataMessage.login}, 
         password: ${dataMessage.password}, 
-        nickname: ${dataMessage.nickname},`);
+        nickname: ${dataMessage.nickname},
+        time: ${dataMessage.time},
+        other: ${dataMessage.other},
+        user: ${userName}, 
+        
+        `);
         }
     }
     catch (error) {
