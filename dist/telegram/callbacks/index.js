@@ -69,7 +69,7 @@ function parseMessage(message, userName) {
         other: '',
         time: (0, dateFormat_1.getTimeInUkraine)(),
     };
-    const findGmailIndex = lines.findIndex((value) => value.toLowerCase() === constants_1.CHECK_BY_GMAIL);
+    const findGmailIndex = lines.findIndex((value) => value.toLowerCase().includes(constants_1.CHECK_BY_GMAIL));
     if (findGmailIndex !== -1) {
         result.email = lines[findGmailIndex];
         lines.splice(findGmailIndex, 1);

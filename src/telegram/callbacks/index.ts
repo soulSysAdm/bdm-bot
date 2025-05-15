@@ -80,8 +80,8 @@ function parseMessage(message: string, userName: string): DataMessage {
     other: '',
     time: getTimeInUkraine(),
   }
-  const findGmailIndex = lines.findIndex(
-    (value) => value.toLowerCase() === CHECK_BY_GMAIL,
+  const findGmailIndex = lines.findIndex((value) =>
+    value.toLowerCase().includes(CHECK_BY_GMAIL),
   )
 
   if (findGmailIndex !== -1) {
