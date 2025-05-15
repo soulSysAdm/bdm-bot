@@ -28,3 +28,6 @@ export const NO_NUMBERS_BY_MONTH = 'Нет номеров в этом месяц
 //Update Cell keys
 export const RANGE_KEY = 'range'
 export const VALUES_KEY = 'values'
+
+//Check
+export const CHECK_BY_GMAIL = '@gmail.com'

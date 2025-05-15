@@ -69,9 +69,12 @@ export interface DataByMonth {
 export interface DataMessage {
   name: string
   link: string
+  email: string
   login: string
   password: string
   nickname: string
+  other: string
+  time: string
 }
 
 export interface SheetUpdate {

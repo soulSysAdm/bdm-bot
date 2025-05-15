@@ -27,15 +27,27 @@ export const getSheetDataByWrite = (
     },
     {
       [RANGE_KEY]: colsKeys[2] + nextRow,
-      [VALUES_KEY]: [[getTrimValue(dataMessage.login)]],
+      [VALUES_KEY]: [[getTrimValue(dataMessage.email)]],
     },
     {
       [RANGE_KEY]: colsKeys[3] + nextRow,
-      [VALUES_KEY]: [[getTrimValue(dataMessage.password)]],
+      [VALUES_KEY]: [[getTrimValue(dataMessage.login)]],
     },
     {
       [RANGE_KEY]: colsKeys[4] + nextRow,
+      [VALUES_KEY]: [[getTrimValue(dataMessage.password)]],
+    },
+    {
+      [RANGE_KEY]: colsKeys[5] + nextRow,
       [VALUES_KEY]: [[getTrimValue(dataMessage.nickname)]],
+    },
+    {
+      [RANGE_KEY]: colsKeys[6] + nextRow,
+      [VALUES_KEY]: [[getTrimValue(dataMessage.time)]],
+    },
+    {
+      [RANGE_KEY]: colsKeys[7] + nextRow,
+      [VALUES_KEY]: [[getTrimValue(dataMessage.other)]],
     },
   ]
 }

@@ -2,6 +2,8 @@ import axios from 'axios'
 import { sendTelegramMessage } from '../index.js'
 import { DataMessage } from '../../types'
 import { writeSheet } from '../../google'
+import { getTimeInUkraine } from '../../assets/dateFormat'
+import { CHECK_BY_GMAIL } from '../../constants'
 
 let TELEGRAM_TOKEN: string | undefined
 
@@ -28,6 +30,39 @@ const deleteMessage = async (chatId: number, messageId: number) => {
   )
 }
 
+interface AdditionalData {
+  name: string
+  link: string
+  login: string
+  password: string
+  other: string
+}
+
+const getNameLinkLoginPasswordOther = (array: string[]): AdditionalData => {
+  const isLogin = array.length > 3
+  if (isLogin) {
+    const [name, link, login, password, ...otherStr] = array
+    const other = otherStr.join(' ')
+    return {
+      name,
+      link,
+      login,
+      password,
+      other,
+    }
+  } else {
+    const [name, link, password, ...otherStr] = array
+    const other = otherStr.join(' ')
+    return {
+      name,
+      link,
+      login: '',
+      password,
+      other,
+    }
+  }
+}
+
 function parseMessage(message: string, userName: string): DataMessage {
   const lines = message
     .trim()
@@ -35,16 +70,41 @@ function parseMessage(message: string, userName: string): DataMessage {
     .map((l) => l.trim())
     .filter(Boolean)
 
-  const [name, link, login, password, nickname] = lines
+  const result = {
+    name: '',
+    link: '',
+    email: '',
+    login: '',
+    password: '',
+    nickname: userName,
+    other: '',
+    time: getTimeInUkraine(),
+  }
+  const findGmailIndex = lines.findIndex(
+    (value) => value.toLowerCase() === CHECK_BY_GMAIL,
+  )
 
-  if (!name || !link || !login || !password) return null
+  if (findGmailIndex !== -1) {
+    result.email = lines[findGmailIndex]
+    lines.splice(findGmailIndex, 1)
+    const additionalData = getNameLinkLoginPasswordOther(lines)
+    for (const key in additionalData) {
+      result[key] = additionalData[key]
+    }
+  } else {
+    result.email = lines[2]
+    lines.splice(2, 1)
+    const additionalData = getNameLinkLoginPasswordOther(lines)
+    for (const key in additionalData) {
+      result[key] = additionalData[key]
+    }
+  }
+
+  if (!result.name || !result.link || !result.email || !result.password)
+    return null
 
   return {
-    name: name,
-    link: link,
-    login: login,
-    password: password,
-    nickname: nickname || userName || null,
+    ...result,
   }
 }
 
@@ -74,11 +134,18 @@ export async function handleCallbackQuery(
         chatId,
         `
         ✅ Доступы успешно записаны. 
-        user: ${userName}, 
+    
         name: ${dataMessage.name}, 
         link: ${dataMessage.link}, 
+        email: ${dataMessage.email}, 
+        login: ${dataMessage.login}, 
         password: ${dataMessage.password}, 
-        nickname: ${dataMessage.nickname},`,
+        nickname: ${dataMessage.nickname},
+        time: ${dataMessage.time},
+        other: ${dataMessage.other},
+        user: ${userName}, 
+        
+        `,
       )
     }
   } catch (error) {
