@@ -1,6 +1,20 @@
 import { VALID_OTHER_KEY, VALID_YES_DEZ_KEY, VALID_YES_KEY } from '../constants'
 
 export const allowedUsers = [6602497931, 5937309404, 5622459508]
+export const allowedUsersData = [
+  {
+    nickname: 'Soul_system_admin',
+    id: 6602497931,
+  },
+  {
+    nickname: 'oiLeksii',
+    id: 5937309404,
+  },
+  {
+    nickname: 'ghostman_head_tech',
+    id: 5622459508,
+  },
+]
 export const range = 'Доступ под замену пароля'
 
 export const validKeys = [VALID_YES_KEY, VALID_YES_DEZ_KEY, VALID_OTHER_KEY]

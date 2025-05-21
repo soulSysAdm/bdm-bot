@@ -1,8 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.colsKeys = exports.validKeys = exports.range = exports.allowedUsers = void 0;
+exports.colsKeys = exports.validKeys = exports.range = exports.allowedUsersData = exports.allowedUsers = void 0;
 const constants_1 = require("../constants");
 exports.allowedUsers = [6602497931, 5937309404, 5622459508];
+exports.allowedUsersData = [
+    {
+        nickname: 'Soul_system_admin',
+        id: 6602497931,
+    },
+    {
+        nickname: 'oiLeksii',
+        id: 5937309404,
+    },
+    {
+        nickname: 'ghostman_head_tech',
+        id: 5622459508,
+    },
+];
 exports.range = 'Доступ под замену пароля';
 exports.validKeys = [constants_1.VALID_YES_KEY, constants_1.VALID_YES_DEZ_KEY, constants_1.VALID_OTHER_KEY];
 const columnToLetter = (col) => {
