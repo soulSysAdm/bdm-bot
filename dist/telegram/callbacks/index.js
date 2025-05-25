@@ -98,8 +98,6 @@ function parseMessage(message, userName) {
 const sendSuccessMessageAdmin = async (nickname, currentChatId) => {
     const adminChatIds = ADMIN_USERS.map((item) => item.id);
     for (const chatId of adminChatIds) {
-        console.log('Admin chatId, ', chatId);
-        console.log('currentChatId, ', currentChatId);
         if (chatId !== currentChatId) {
             await (0, index_js_1.sendTelegramMessage)(chatId, `▶️ Отправил новые доступы в таблицу. Никнейм: ${nickname}`);
         }

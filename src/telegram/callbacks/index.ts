@@ -121,8 +121,6 @@ const sendSuccessMessageAdmin = async (
 ) => {
   const adminChatIds = ADMIN_USERS.map((item) => item.id)
   for (const chatId of adminChatIds) {
-    console.log('Admin chatId, ', chatId)
-    console.log('currentChatId, ', currentChatId)
     if (chatId !== currentChatId) {
       await sendTelegramMessage(
         chatId,
