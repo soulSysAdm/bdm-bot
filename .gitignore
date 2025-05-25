@@ -3,6 +3,4 @@
 google-credentials.json
 .env
 /mock
-.idea
-
-
+.idea/
