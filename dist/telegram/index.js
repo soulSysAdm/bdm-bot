@@ -16,6 +16,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./utils/sendTelegram"), exports);
 __exportStar(require("./utils/checkUser"), exports);
+__exportStar(require("./utils/checkGroup"), exports);
 __exportStar(require("./commands/start"), exports);
 // export * from './commands/check'
 __exportStar(require("./callbacks"), exports);

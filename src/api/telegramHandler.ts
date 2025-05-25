@@ -5,9 +5,14 @@ import {
   sendInstructionTelegramMessage,
   isAuthorizedUser,
 } from '../telegram'
-import { handleCallbackQuery } from '../telegram'
+import {
+  handleCallbackQuery,
+  isPrivateChat,
+  leaveChatIfNotPrivate,
+} from '../telegram'
 
 // : Promise<VercelResponse>
+
 export default async function telegramHandler(
   req: VercelRequest,
   res: VercelResponse,
@@ -15,6 +20,14 @@ export default async function telegramHandler(
   console.log('🔥 Webhook вызван в', getTimeInUkraine())
   try {
     const body = req.body
+    //Защита от группы
+    if (!isPrivateChat(body)) {
+      //Выход с группы
+      await leaveChatIfNotPrivate(body)
+      res.status(200).send('⛔️ Бот работает только в личных чатах')
+      return
+    }
+
     const userId = body?.message?.from?.id || body?.callback_query?.from?.id
     const chatId =
       body?.message?.chat?.id || body?.callback_query?.message?.chat?.id
@@ -38,8 +51,6 @@ export default async function telegramHandler(
     } else if (text === '/help') {
       await sendInstructionTelegramMessage(chatId)
     } else {
-      console.log(text)
-      console.log(JSON.stringify(text))
       await handleCallbackQuery(userName, text, chatId, messageId)
     }
     res.status(200).send('ok')

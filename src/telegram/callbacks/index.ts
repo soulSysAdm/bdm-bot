@@ -1,18 +1,25 @@
 import axios from 'axios'
-import { sendTelegramMessage } from '../index.js'
-import { DataMessage } from '../../types'
+import {
+  sendInstructionTelegramMessage,
+  sendTelegramMessage,
+} from '../index.js'
+import { AdminUser, DataMessage } from '../../types'
 import { writeSheet } from '../../google'
 import { getTimeInUkraine } from '../../assets/dateFormat'
 import { CHECK_BY_GMAIL } from '../../constants'
+import { aw } from '@upstash/redis/zmscore-BdNsMd17'
 
 let TELEGRAM_TOKEN: string | undefined
+let ADMIN_USERS: AdminUser[] | undefined
 
 if (process.env.VERCEL) {
   TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN || ''
+  ADMIN_USERS = JSON.parse(process.env.ADMIN_USERS || '[]')
 } else {
   const dotenv = require('dotenv')
   dotenv.config()
   TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN || ''
+  ADMIN_USERS = JSON.parse(process.env.ADMIN_USERS || '[]')
 }
 
 const sendErrorMassage = async (chatId: number, message: string) => {
@@ -108,6 +115,16 @@ function parseMessage(message: string, userName: string): DataMessage {
   }
 }
 
+const sendSuccessMessageAdmin = async (nickname: string) => {
+  const adminChatIds = ADMIN_USERS.map((item) => item.id)
+  for (const chatId of adminChatIds) {
+    await sendTelegramMessage(
+      chatId,
+      `▶️ Отправил новые доступы в таблицу. Никнейм: ${nickname}`,
+    )
+  }
+}
+
 export async function handleCallbackQuery(
   userName: string,
   text: string,
@@ -115,38 +132,18 @@ export async function handleCallbackQuery(
   messageId: number,
 ) {
   try {
-    // console.log('callbackQuery ', callbackQuery)
-    // const user = callbackQuery.from.username || callbackQuery.from.first_name
-    // const messageId = callbackQuery.message.message_id
-
     const dataMessage = parseMessage(text, userName)
-
-    console.log('dataMessage ', dataMessage)
     await deleteMessage(chatId, messageId)
     if (!dataMessage) {
       await sendTelegramMessage(
         chatId,
         `❌ Сообщение отправлено не по иструкции. Отсутвует одно из обязательных полей`,
       )
+      await sendInstructionTelegramMessage(chatId)
     } else {
       await writeSheet(dataMessage)
-      await sendTelegramMessage(
-        chatId,
-        `
-        ✅ Доступы успешно записаны. 
-    
-        name: ${dataMessage.name}, 
-        link: ${dataMessage.link}, 
-        email: ${dataMessage.email}, 
-        login: ${dataMessage.login}, 
-        password: ${dataMessage.password}, 
-        nickname: ${dataMessage.nickname},
-        time: ${dataMessage.time},
-        other: ${dataMessage.other},
-        user: ${userName}, 
-        
-        `,
-      )
+      await sendTelegramMessage(chatId, `✅ Доступы успешно записаны.`)
+      await sendSuccessMessageAdmin(dataMessage.nickname)
     }
   } catch (error) {
     console.error('❌ Ошибка обработки callbackQuery:', error.message)

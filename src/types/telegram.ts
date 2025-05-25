@@ -9,3 +9,8 @@ export interface AllowedUser {
   nickname: string
   id: number
 }
+
+export interface AdminUser {
+  nickname: string
+  id: number
+}

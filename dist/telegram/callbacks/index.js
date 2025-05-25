@@ -10,13 +10,16 @@ const google_1 = require("../../google");
 const dateFormat_1 = require("../../assets/dateFormat");
 const constants_1 = require("../../constants");
 let TELEGRAM_TOKEN;
+let ADMIN_USERS;
 if (process.env.VERCEL) {
     TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN || '';
+    ADMIN_USERS = JSON.parse(process.env.ADMIN_USERS || '[]');
 }
 else {
     const dotenv = require('dotenv');
     dotenv.config();
     TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN || '';
+    ADMIN_USERS = JSON.parse(process.env.ADMIN_USERS || '[]');
 }
 const sendErrorMassage = async (chatId, message) => {
     const messageTelegram = `Ошибка ${message}"`;
@@ -92,33 +95,24 @@ function parseMessage(message, userName) {
         ...result,
     };
 }
+const sendSuccessMessageAdmin = async (nickname) => {
+    const adminChatIds = ADMIN_USERS.map((item) => item.id);
+    for (const chatId of adminChatIds) {
+        await (0, index_js_1.sendTelegramMessage)(chatId, `▶️ Отправил новые доступы в таблицу. Никнейм: ${nickname}`);
+    }
+};
 async function handleCallbackQuery(userName, text, chatId, messageId) {
     try {
-        // console.log('callbackQuery ', callbackQuery)
-        // const user = callbackQuery.from.username || callbackQuery.from.first_name
-        // const messageId = callbackQuery.message.message_id
         const dataMessage = parseMessage(text, userName);
-        console.log('dataMessage ', dataMessage);
         await deleteMessage(chatId, messageId);
         if (!dataMessage) {
             await (0, index_js_1.sendTelegramMessage)(chatId, `❌ Сообщение отправлено не по иструкции. Отсутвует одно из обязательных полей`);
+            await (0, index_js_1.sendInstructionTelegramMessage)(chatId);
         }
         else {
             await (0, google_1.writeSheet)(dataMessage);
-            await (0, index_js_1.sendTelegramMessage)(chatId, `
-        ✅ Доступы успешно записаны. 
-    
-        name: ${dataMessage.name}, 
-        link: ${dataMessage.link}, 
-        email: ${dataMessage.email}, 
-        login: ${dataMessage.login}, 
-        password: ${dataMessage.password}, 
-        nickname: ${dataMessage.nickname},
-        time: ${dataMessage.time},
-        other: ${dataMessage.other},
-        user: ${userName}, 
-        
-        `);
+            await (0, index_js_1.sendTelegramMessage)(chatId, `✅ Доступы успешно записаны.`);
+            await sendSuccessMessageAdmin(dataMessage.nickname);
         }
     }
     catch (error) {
