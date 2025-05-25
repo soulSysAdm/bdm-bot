@@ -7,7 +7,6 @@ import { AdminUser, DataMessage } from '../../types'
 import { writeSheet } from '../../google'
 import { getTimeInUkraine } from '../../assets/dateFormat'
 import { CHECK_BY_GMAIL } from '../../constants'
-import { aw } from '@upstash/redis/zmscore-BdNsMd17'
 
 let TELEGRAM_TOKEN: string | undefined
 let ADMIN_USERS: AdminUser[] | undefined
