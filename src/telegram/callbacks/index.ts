@@ -115,13 +115,18 @@ function parseMessage(message: string, userName: string): DataMessage {
   }
 }
 
-const sendSuccessMessageAdmin = async (nickname: string) => {
+const sendSuccessMessageAdmin = async (
+  nickname: string,
+  currentChatId: number,
+) => {
   const adminChatIds = ADMIN_USERS.map((item) => item.id)
   for (const chatId of adminChatIds) {
-    await sendTelegramMessage(
-      chatId,
-      `▶️ Отправил новые доступы в таблицу. Никнейм: ${nickname}`,
-    )
+    if (chatId !== currentChatId) {
+      await sendTelegramMessage(
+        chatId,
+        `▶️ Отправил новые доступы в таблицу. Никнейм: ${nickname}`,
+      )
+    }
   }
 }
 
@@ -143,7 +148,7 @@ export async function handleCallbackQuery(
     } else {
       await writeSheet(dataMessage)
       await sendTelegramMessage(chatId, `✅ Доступы успешно записаны.`)
-      await sendSuccessMessageAdmin(dataMessage.nickname)
+      await sendSuccessMessageAdmin(dataMessage.nickname, chatId)
     }
   } catch (error) {
     console.error('❌ Ошибка обработки callbackQuery:', error.message)
