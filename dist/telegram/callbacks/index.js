@@ -95,10 +95,14 @@ function parseMessage(message, userName) {
         ...result,
     };
 }
-const sendSuccessMessageAdmin = async (nickname) => {
+const sendSuccessMessageAdmin = async (nickname, currentChatId) => {
     const adminChatIds = ADMIN_USERS.map((item) => item.id);
     for (const chatId of adminChatIds) {
-        await (0, index_js_1.sendTelegramMessage)(chatId, `▶️ Отправил новые доступы в таблицу. Никнейм: ${nickname}`);
+        console.log('Admin chatId, ', chatId);
+        console.log('currentChatId, ', currentChatId);
+        if (chatId !== currentChatId) {
+            await (0, index_js_1.sendTelegramMessage)(chatId, `▶️ Отправил новые доступы в таблицу. Никнейм: ${nickname}`);
+        }
     }
 };
 async function handleCallbackQuery(userName, text, chatId, messageId) {
@@ -112,7 +116,7 @@ async function handleCallbackQuery(userName, text, chatId, messageId) {
         else {
             await (0, google_1.writeSheet)(dataMessage);
             await (0, index_js_1.sendTelegramMessage)(chatId, `✅ Доступы успешно записаны.`);
-            await sendSuccessMessageAdmin(dataMessage.nickname);
+            await sendSuccessMessageAdmin(dataMessage.nickname, chatId);
         }
     }
     catch (error) {
